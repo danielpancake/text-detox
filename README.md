@@ -23,11 +23,11 @@ The data is given in the `.tsv` format, means columns are separated by `\t` symb
 | Column | Type | Discription |
 | ----- | ------- | ---------- |
 | reference | str | First item from the pair |
-| ref_tox | float | toxicity level of reference text |
 | translation | str | Second item from the pair - paraphrazed version of the reference|
-| trn_tox | float | toxicity level of translation text |
 | similarity | float | cosine similarity of the texts |
 | lenght_diff | float | relative length difference between texts |
+| ref_tox | float | toxicity level of reference text |
+| trn_tox | float | toxicity level of translation text |
 
 ## Evaluation criterias
 
@@ -43,7 +43,7 @@ text-detoxification
 │
 ├── data
 │   ├── external # Data from third party sources
-│   ├── interim  # Intermediate data that has been transformed.
+│   ├── interim  # Intermediate data that has been transformed
 │   └── raw      # The original, immutable data
 │
 ├── models       # Trained and serialized models, final checkpoints
