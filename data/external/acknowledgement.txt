@@ -1,0 +1,7 @@
+Bad Bad Words dataset
+  This dataset contains a lot of bad words.
+  https://www.kaggle.com/datasets/nicapotato/bad-bad-words
+
+  Carnegie Mellon University
+  user2592414 on StackExchange
+
