@@ -5,7 +5,10 @@ import re
 from scipy.sparse import csr_matrix, hstack
 
 
-def clean_text(text):
+def clean_text(text: str) -> str:
+    """
+    Clean text from special characters and some of contractions.
+    """
     text = text.lower()
     text = re.sub(r"what's", "what is ", text)
     text = re.sub(r"\'s", " ", text)
@@ -28,7 +31,7 @@ class STAToxic:
     STAToxic class -- Style Transfer Accuracy for Toxicity
 
     Models are trained based on the: https://www.kaggle.com/code/rhodiumbeng/classifying-multi-label-comments-0-9741-lb/notebook
-    For more information see: ../../notebooks/04-metrics-STA.ipynb
+    For more information see: `notebooks/04-metrics-STA.ipynb`
     """
 
     def __init__(self):
@@ -82,6 +85,7 @@ class STAToxic:
             y = self.chains_logreg[label].predict(input_data)
             prob = self.chains_logreg[label].predict_proba(input_data)[:, 1]
 
+            # Average the probability
             df[label] = (df[label] + prob) / 2
 
             input_data = self.add_feature(input_data, y)

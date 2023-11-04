@@ -20,14 +20,14 @@ The dataset is a subset of the ParaNMT corpus (50M sentence pairs). The filtered
 
 The data is given in the `.tsv` format, means columns are separated by `\t` symbol.
 
-| Column | Type | Discription |
-| ----- | ------- | ---------- |
-| reference | str | First item from the pair |
-| translation | str | Second item from the pair - paraphrazed version of the reference|
-| similarity | float | cosine similarity of the texts |
-| lenght_diff | float | relative length difference between texts |
-| ref_tox | float | toxicity level of reference text |
-| trn_tox | float | toxicity level of translation text |
+| Column      | Type  | Discription                                                      |
+| ----------- | ----- | ---------------------------------------------------------------- |
+| reference   | str   | First item from the pair                                         |
+| translation | str   | Second item from the pair - paraphrazed version of the reference |
+| similarity  | float | cosine similarity of the texts                                   |
+| lenght_diff | float | relative length difference between texts                         |
+| ref_tox     | float | toxicity level of reference text                                 |
+| trn_tox     | float | toxicity level of translation text                               |
 
 ## Evaluation criterias
 
@@ -60,7 +60,7 @@ text-detoxification
 ├── requirements.txt # The requirements file for reproducing the analysis environment, e.g.
 │                      generated with pip freeze › requirements. txt'
 └── src                 # Source code for use in this assignment
-    │                 
+    │
     ├── data            # Scripts to download or generate data
     │   └── make_dataset.py
     │
@@ -84,13 +84,13 @@ In the `src` directory you should put all the code that is used for the final so
 
 Full assignment without any problems is said to be the `100%` solution.
 
-| Criteria | Weight (%) | Comment |
-| ---- | ----- | ----- |
-| Structure and code quality | 25 | Code quality, structure, comments, clean repo, commit history, reproducibility (manual seeding) |
-| Visualization, notebooks quality | 10 | Jupyter notebooks, visualizations |
-| Solution building | 40 |  Solution exploration, references, ideas decription, final report structure |
-| Final score, evaluation  | 15 | Evaluation function, final score, quality of results |
-| Usability, documentation | 10 | Docstrings, arguments parsing, README |
+| Criteria                         | Weight (%) | Comment                                                                                         |
+| -------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| Structure and code quality       | 25         | Code quality, structure, comments, clean repo, commit history, reproducibility (manual seeding) |
+| Visualization, notebooks quality | 10         | Jupyter notebooks, visualizations                                                               |
+| Solution building                | 40         | Solution exploration, references, ideas decription, final report structure                      |
+| Final score, evaluation          | 15         | Evaluation function, final score, quality of results                                            |
+| Usability, documentation         | 10         | Docstrings, arguments parsing, README                                                           |
 
 If **PMLDL Course Team** will have any questions about your assignment or your work fails to show your results you will be called solution defence procedure.
 
