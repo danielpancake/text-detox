@@ -2,3 +2,4 @@
 * text=auto
 *.tsv filter=lfs diff=lfs merge=lfs -text
 *.scv filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
