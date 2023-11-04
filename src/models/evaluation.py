@@ -1,6 +1,9 @@
+import nltk
 import pandas as pd
 import pickle
 import re
+import spacy
+import string
 
 from scipy.sparse import csr_matrix, hstack
 
@@ -91,3 +94,54 @@ class STAToxic:
             input_data = self.add_feature(input_data, y)
 
         return df
+
+
+class Similarity:
+    """
+    Similarity class -- Calculates the similarity between two sentences.
+    """
+
+    def __init__(self) -> None:
+        self.nlp = spacy.load("en_core_web_lg")
+
+    @staticmethod
+    def get_wo_score(ref: str, hyp: str) -> float:
+        """
+        Returns the Word Overlap score.
+        """
+        # Remove all punctuation and replace with whitespace
+        ref = ref.translate(
+            str.maketrans(string.punctuation, " " * len(string.punctuation))
+        )
+        hypothesis = hyp.translate(
+            str.maketrans(string.punctuation, " " * len(string.punctuation))
+        )
+
+        # Calculate the number of words in the reference and hypothesis
+        ref_words = set(ref.lower().split())
+        hyp_words = set(hyp.lower().split())
+
+        inter_len = len(ref_words.intersection(hyp_words))
+        union_len = len(ref_words.union(hyp_words))
+
+        # Avoid division by zero
+        if union_len == 0:
+            return 0
+
+        return inter_len / union_len
+
+    def get_cosine_score(self, ref: str, hyp: str) -> float:
+        """
+        Returns the Cosine Similarity score.
+        """
+        ref_doc = self.nlp(ref)
+        hyp_doc = self.nlp(hyp)
+
+        return ref_doc.similarity(hyp_doc)
+
+    @staticmethod
+    def get_bleu_score(ref: str, hyp: str) -> float:
+        """
+        Returns the BLEU score.
+        """
+        return nltk.translate.bleu_score.sentence_bleu([ref], hyp)
