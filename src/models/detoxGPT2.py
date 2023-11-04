@@ -42,7 +42,7 @@ class detoxGPT2:
         warmup_steps: int = 500,
         save_steps: int = 10_000,
         logging_steps: int = 500,
-    ):
+    ) -> None:
         if self.model is None:
             self.model = AutoModelForCausalLM.from_pretrained("gpt2", cache_dir="cache")
 
@@ -93,7 +93,7 @@ class detoxGPT2:
         trainer.save_model(self.model_dir)
         self.tokenizer.save_pretrained(self.model_dir)
 
-    def generate(self, input_text: str) -> str:
+    def generate(self, input_text: str, device: str = "cuda") -> str:
         if self.model is None:
             try:
                 self.model = AutoModelForCausalLM.from_pretrained(self.model_dir)
@@ -111,7 +111,7 @@ class detoxGPT2:
                 "text-generation",
                 model=self.model,
                 tokenizer=self.tokenizer,
-                device="cuda",
+                device=device,
             )
 
         prompt_text = (
@@ -127,3 +127,28 @@ class detoxGPT2:
             num_return_sequences=1,
             pad_token_id=self.tokenizer.eos_token_id,
         )[0]["generated_text"]
+
+        return generated_text
+
+    def get_detoxed_suggestions(self, input_text: str, device: str = "cuda") -> list:
+        generated_text = self.generate(input_text, device=device)
+
+        suggestions = generated_text.split(
+            self.special_tokens_dict["separator"]
+            + self.special_tokens_dict["detox_begin"]
+        )[1]
+
+        # Replace all the special tokens with [SPLIT]
+        for token in self.special_tokens_dict.values():
+            suggestions = suggestions.replace(token, self.special_tokens_dict["split"])
+
+        # Split by [SPLIT]
+        suggestions = suggestions.split(self.special_tokens_dict["split"])
+
+        # Trim if any of \", \n, or whitespace is present
+        suggestions = [s.strip('"\n ') for s in suggestions]
+
+        # Remove empty strings
+        suggestions = list(filter(None, suggestions))
+
+        return suggestions
