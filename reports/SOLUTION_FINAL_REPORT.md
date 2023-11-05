@@ -62,6 +62,8 @@ Training is performed on 35% of the dataset due to limited computational resourc
 
 The model is trained for 1 epochs. The training process takes 1 hour on two NVIDIA T4 GPUs.
 
+For more details, see [this notebook](../notebooks/03_1__GPT2_training.ipynb).
+
 ## Evaluation
 
 Trained model is not guaranteed to procude profanity-free or even sensible text. We evaluate the model on the test set to get a better understanding of its performance.
@@ -76,6 +78,8 @@ For this task, we use two different types of metrics:
 #### Style Transfer Accuracy
 
 Our hypothesis is that the model should be able to transfer the style of the text from toxic to non-toxic. To evaluate the toxicity, we use the logistic regression classifier trained on the [Jigsaw Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) dataset that achieved the highest public score.
+
+For more details, see [this notebook](../notebooks/04_1__metrics_STA.ipynb).
 
 #### Similarity
 
@@ -103,18 +107,22 @@ $$
 
 where weights are chosen arbitrarily based on the intuition that word overlap tend to be zero for rephrased sentences, and cosine similarity and BLEU score are more informative.
 
+For more details, see [this notebook](../notebooks/04_2__metrics_similarity.ipynb).
+
 # Inference Process
 
 The inference process is straightforward. We feed the model with annotated toxic text and get a sequence of predicted continuation. We then remove the tokens from the sequence and get suggested detoxified texts.
 
 After, we evaluate each suggested text with the metrics described above and choose the best one.
 
+For more details, see [this notebook](../notebooks/03_2__GPT2_inference.ipynb) and [this notebook](../notebooks/05_GPT2_inference_with_metrics.ipynb).
+
 ## Results
 
 We evaluated the performance of the fine-tuned GPT-2 model on the test set and compared it to two baselines:
 
-- Delete -- deleting detected profanity words.
-- Replace -- replacing profanity words with synonyms.
+- Delete -- [deleting detected profanity words](../notebooks/00_1__delete_baseline.ipynb).
+- Replace -- [replacing profanity words with synonyms](../notebooks/00_2__replace_baseline.ipynb).
 
 The following chart summarizes the similarity scores and detoxification scores for the different models.
 
