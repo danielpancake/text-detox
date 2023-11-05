@@ -10,7 +10,11 @@ Daniel Vakhrushev <>@innopolis.university BS21-DS-02
 from src.models.detoxGPT2 import detoxGPT2
 
 detoxGPT2().train("data/interim/processed.tsv", 128)
+# Note: that it may be better to use max length from the dataset
+# as the block size, but it will take more time to train.
 ```
+
+For more information on the training process, please refer to [this notebook](./notebooks/03_1__GPT2_training.ipynb).
 
 ### Inference
 
@@ -30,3 +34,7 @@ print(
     )[0]
 )
 ```
+
+For more information on the inference process, please refer to [this notebook](./notebooks/03_2__GPT2_inference.ipynb).
+
+For more information on the ranked suggestions from the inference, please refer to [this notebook](./notebooks/05_GPT2_inference_with_metrics.ipynb).
