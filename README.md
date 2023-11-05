@@ -4,6 +4,16 @@ Daniel Vakhrushev <>@innopolis.university BS21-DS-02
 
 ## How to run the model
 
+### Training
+
+```python
+from src.models.detoxGPT2 import detoxGPT2
+
+detoxGPT2().train("data/interim/processed.tsv", 128)
+```
+
+### Inference
+
 ```python
 """
 This is a minimal example of how to use the detoxGPT2 model.

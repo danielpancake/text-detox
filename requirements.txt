@@ -1,3 +1,4 @@
+accelerate==0.24.1
 annotated-types==0.6.0
 asttokens==2.4.0
 backcall==0.2.0
