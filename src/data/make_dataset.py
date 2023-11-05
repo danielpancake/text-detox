@@ -11,14 +11,10 @@ MAX_TEXT_LENGTH = 700
 FILEPATH = os.path.dirname(__file__)
 
 
-if __name__ == "__main__":
-    # Reading the data from the file
-    df = pd.read_csv(
-        os.path.join(FILEPATH, "../../data/raw/paranmt_for_detox_500k.tsv"),
-        sep="\t",
-        index_col=0,
-    )
-
+def process_data(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function processes the data by filtering and modifying certain columns.
+    """
     # Drop rows with reference or translation text length more than 700 symbols
     df = df[df["reference"].str.len() <= MAX_TEXT_LENGTH]
     df = df[df["translation"].str.len() <= MAX_TEXT_LENGTH]
@@ -40,6 +36,40 @@ if __name__ == "__main__":
 
     # ..and change the toxicity difference sign
     df.loc[index_mask, "tox_diff"] = -df.loc[index_mask, "tox_diff"]
+
+    return df
+
+
+def get_dataset_split(df: pd.DataFrame, size: int = 1000) -> pd.DataFrame:
+    """
+    This function splits the data into train and test samples.
+    """
+    # Split the data into train and test samples
+    df_test = df.sample(size, random_state=42)
+    df_train = df.drop(df_test.index)
+
+    return df_train, df_test
+
+
+if __name__ == "__main__":
+    # Reading the data from the file
+    df = pd.read_csv(
+        os.path.join(FILEPATH, "../../data/raw/paranmt_for_detox_500k.tsv"),
+        sep="\t",
+        index_col=0,
+    )
+
+    # Processing the data
+    df = process_data(df)
+
+    # Save test split
+    _, df_test = get_dataset_split(df)
+    df_test[["reference", "translation"]].to_csv(
+        os.path.join(FILEPATH, "../../data/interim/test.tsv"),
+        sep="\t",
+        index=False,
+        header=False,
+    )
 
     # Save only reference and translation texts
     df[["reference", "translation"]].to_csv(
