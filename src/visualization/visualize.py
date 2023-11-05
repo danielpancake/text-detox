@@ -32,6 +32,9 @@ def generate_dataset_text_lengths_distribution():
 
 
 def analyze_scores():
+    """
+    Generates a plot of scores for different models.
+    """
     df_delete_scores = pd.read_csv(
         os.path.join(FILEPATH, "../../data/interim/delete_baseline_scores.csv"),
     )
