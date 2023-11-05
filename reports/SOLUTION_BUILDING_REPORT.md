@@ -1,6 +1,6 @@
 # Solution Building Report
 
-This report is dedicated to the process of building a solution for the task of detecting profanity in text (or text detoxification).
+This report is dedicated to the process of building a solution for the task of detecting profanity in text (or text detoxification). **Warning:** this report contains profanity.
 
 ## Baseline 1: Delete profanity words
 
@@ -57,14 +57,29 @@ To prompt for style transfer, we use the following template as input:
 [TOX] ... [/TOX]»»[DETOX]
 ```
 
+Example output:
+
+```text
+Toxic:     What a fucking stupid thing to say!
+Non-toxic: what a thing that is to say!
+```
+
+Since GPT-2 output is not fully controllable, we split it by [/DETOX] tokens. As a result, we get a list of sentences that are suggested by GPT-2 as non-toxic. We can then select the most similar sentence to the original toxic sentence.
+
 ## Results
 
 As a result, we have a GPT-2 based model that can generate profanity-free text from toxic text. It has the following advantages:
 
 - It can be trained on a small portion of the data.
+- It is easy to relatively easy to train.
 
 It has the following disadvantages:
 
+- It requires a parallel corpus of toxic and non-toxic text to train.
 - It requires a lot of computational resources to train.
 - Often generates text that is not grammatically correct or does not make sense.
 - It is not guaranteed to generate text that is free of profanity.
+
+To improve, we could fine-tune GPT-2 on a larger dataset of parallel toxic and non-toxic text. We could also experiment with other pretrained models like BERT and optimize the prompts/formatting to get better control over the output. Evaluation metrics like BLEU, ROUGE and human evaluation could be used to measure quality of output.
+
+Overall this presents a promising approach but requires more work to reach a decent level performance.
