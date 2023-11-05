@@ -1,3 +1,8 @@
+"""
+detoxGPT2 model
+Pretrained GPT2 model fine-tuned on the detox dataset
+"""
+
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -7,6 +12,13 @@ from transformers import (
     Trainer,
     pipeline,
 )
+
+from evaluation import STAToxic, Similarity
+
+import pandas as pd
+
+METRIC_SIM = Similarity()
+METRIC_TOX = STAToxic()
 
 
 class detoxGPT2:
@@ -176,3 +188,73 @@ class detoxGPT2:
         suggestions = list(filter(None, suggestions))
 
         return suggestions
+
+    def get_best_suggestion(
+        self,
+        input_text: str,
+        max_length: int = 150,
+        sequences: int = 3,
+        device: str = "cuda",
+    ):
+        """
+        Returns the best suggestion based on the following criteria:
+        - Toxicity
+        - Word Overlap
+        - Cosine Similarity
+        - BLEU Score
+
+        and the associated scores
+        """
+        suggestions = self.get_detoxed_suggestions(
+            input_text, max_length, sequences, device
+        )
+        if len(suggestions) == 0:
+            return input_text
+        else:
+            df = pd.DataFrame(
+                suggestions,
+                columns=["suggestion"],
+            )
+
+            # Add empty column for each metric
+            metrics = ["wo", "cs", "bleu"]
+            df[metrics] = pd.DataFrame(
+                [[0] * len(metrics)], index=df.index, dtype=float
+            )
+
+            # Generate toxicity report for each suggestion
+            toxicity_report = METRIC_TOX.toxicity_report(df["suggestion"])
+
+            for index, row in df.iterrows():
+                df.loc[index, "wo"] = METRIC_SIM.get_wo_score(
+                    input_text, row["suggestion"]
+                )
+                df.loc[index, "cs"] = METRIC_SIM.get_cosine_score(
+                    input_text, row["suggestion"]
+                )
+                df.loc[index, "bleu"] = METRIC_SIM.get_bleu_score(
+                    input_text, row["suggestion"]
+                )
+
+            # Concat with toxicity report
+            df = pd.concat([df, toxicity_report], axis=1)
+
+            # Calculate the score
+            metric_weights = {"wo": 0.1, "cs": 0.5, "bleu": 0.4}
+
+            # Toxicity report should be as low as possible
+            # Similarity metrics should be as high as possible
+            df["detox_score"] = 1 - df[["toxic"]].mean(axis=1)
+            df["similarity"] = df[metrics].dot(pd.Series(metric_weights))
+
+            # Final score
+            df["score"] = df[["detox_score", "similarity"]].mean(axis=1)
+
+            # Find the suggestion with the highest score
+            best_suggestion = df.loc[df["score"].idxmax()]
+
+            # Split into two parts suggestion and everything but it
+            return (
+                best_suggestion["suggestion"],
+                best_suggestion[[*metrics, "detox_score"]],
+            )
