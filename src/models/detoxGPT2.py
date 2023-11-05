@@ -10,7 +10,16 @@ from transformers import (
 
 
 class detoxGPT2:
-    def __init__(self, model_dir) -> None:
+    special_tokens_dict = {
+        "tox_begin": "[TOX]",
+        "tox_end": "[/TOX]",
+        "detox_begin": "[DETOX]",
+        "detox_end": "[/DETOX]",
+        "separator": "»»",
+        "split": "[SPLIT]",
+    }
+
+    def __init__(self, model_dir: str = "danielpancake/detoxGPT2-pmldl") -> None:
         # The format is: [TOX]text[/TOX]»»[DETOX]text[/DETOX]
         # [TOX]   - source text
         # [DETOX] - target text
@@ -18,15 +27,6 @@ class detoxGPT2:
 
         # So, we will add 5 custom tokens to the vocabulary:
         # [TOX], [/TOX], [DETOX], [/DETOX], »»
-        self.special_tokens_dict = {
-            "tox_begin": "[TOX]",
-            "tox_end": "[/TOX]",
-            "detox_begin": "[DETOX]",
-            "detox_end": "[/DETOX]",
-            "separator": "»»",
-            "split": "[SPLIT]",
-        }
-
         self.model = None
         self.tokenizer = None
         self.generator = None
@@ -96,13 +96,17 @@ class detoxGPT2:
     def generate(self, input_text: str, device: str = "cuda") -> str:
         if self.model is None:
             try:
-                self.model = AutoModelForCausalLM.from_pretrained(self.model_dir)
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    self.model_dir, cache_dir="cache"
+                )
             except:
                 raise Exception("Model not found")
 
         if self.tokenizer is None:
             try:
-                self.tokenizer = AutoTokenizer.from_pretrained(self.model_dir)
+                self.tokenizer = AutoTokenizer.from_pretrained(
+                    self.model_dir, cache_dir="cache"
+                )
             except:
                 raise Exception("Tokenizer not found")
 

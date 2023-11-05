@@ -1,4 +1,5 @@
 .venv
 *.zip
-/data/temporary/
+cache/
 jigsaw-toxic-comment-classification-challenge/
+/data/temporary/*

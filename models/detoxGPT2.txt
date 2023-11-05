@@ -1,0 +1,1 @@
+https://huggingface.co/danielpancake/detoxGPT2-pmldl/
