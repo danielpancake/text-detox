@@ -5,7 +5,11 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-from detoxGPT2 import detoxGPT2
+if __name__ == "__main__":
+    from detoxGPT2 import detoxGPT2
+else:
+    from .detoxGPT2 import detoxGPT2
+
 from tqdm import tqdm
 
 FILEPATH = os.path.dirname(__file__)
@@ -34,3 +38,4 @@ if __name__ == "__main__":
         os.path.join(FILEPATH, "../../data/interim/detoxGPT_scores.csv"),
         index=False,
     )
+    print("Done!")

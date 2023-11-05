@@ -13,9 +13,17 @@ from transformers import (
     pipeline,
 )
 
-from evaluation import STAToxic, Similarity
+if __name__ == "__main__":
+    from evaluation import STAToxic, Similarity
+else:
+    from .evaluation import STAToxic, Similarity
+
+from typing import Tuple
 
 import pandas as pd
+import warnings
+
+warnings.filterwarnings("ignore")
 
 METRIC_SIM = Similarity()
 METRIC_TOX = STAToxic()
@@ -195,7 +203,7 @@ class detoxGPT2:
         max_length: int = 150,
         sequences: int = 3,
         device: str = "cuda",
-    ):
+    ) -> Tuple[str, pd.DataFrame]:
         """
         Returns the best suggestion based on the following criteria:
         - Toxicity
@@ -208,6 +216,7 @@ class detoxGPT2:
         suggestions = self.get_detoxed_suggestions(
             input_text, max_length, sequences, device
         )
+
         if len(suggestions) == 0:
             return input_text
         else:
@@ -251,10 +260,10 @@ class detoxGPT2:
             df["score"] = df[["detox_score", "similarity"]].mean(axis=1)
 
             # Find the suggestion with the highest score
-            best_suggestion = df.loc[df["score"].idxmax()]
+            df.sort_values(by=["score"], ascending=False, inplace=True)
 
             # Split into two parts suggestion and everything but it
             return (
-                best_suggestion["suggestion"],
-                best_suggestion[[*metrics, "detox_score"]],
+                df.iloc[0]["suggestion"],
+                df.iloc[0][[*metrics, "detox_score"]],
             )
