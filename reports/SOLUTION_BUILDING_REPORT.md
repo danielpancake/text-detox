@@ -19,6 +19,8 @@ To find profanity words, we use a dictionary of profanity words from [here](http
 
 To make use of this dictionary, we implement kgram similarity search. For each word in the sentence, we find the most similar word in the dictionary. If the similarity is above a certain threshold, we consider the word profanity and delete it from the sentence.
 
+For more details, see [this notebook](../notebooks/00_1__delete_baseline.ipynb).
+
 ## Baseline 2: Replace profanity words with synonyms
 
 This baseline is based on the idea of replacing profanity words with their synonyms. This approach is similar to the previous one, but instead of deleting profanity words, we replace them with similar words.
@@ -35,6 +37,8 @@ Replace:  What's it like to make love someone to dying
 ### Implementation
 
 Again, we use the same dictionary of profanity words from the previous baseline. To find synonyms, we use the [WordNet](https://wordnet.princeton.edu/) database. For each word in the sentence, we find some number of synonyms. Then, we filter synonyms that are considered profanity and replace the word with the first synonym in the list. If none found, we delete the word.
+
+For more details, see [this notebook](../notebooks/00_2__replace_baseline.ipynb).
 
 ## Hypothesis: Using pretrained model: GPT-2
 

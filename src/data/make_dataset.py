@@ -7,7 +7,7 @@ and finally save the processed data back into a new .tsv file.
 import os
 import pandas as pd
 
-MAX_TEXT_LENGTH = 700
+MAX_TEXT_LENGTH = 96
 FILEPATH = os.path.dirname(__file__)
 
 

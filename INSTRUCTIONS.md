@@ -12,7 +12,7 @@ Your assignment is to create a solution for detoxing text with high level of tox
 
 Level of Toxicity is labeled with annotating binary classification by people. Text is passed to annotators for them to put specific label toxic/non-toxic. Then number of positive / toxic assesments are divided by the total number of annotators. This process is performed for every entry in the data, resulting in toxicity dataset.
 
-By this process, we have text with toxicity level. However, for training the model it is best to have sample with high toxicity level and its paraphrazed version with low toxicity level. This gives an opportunity for the model to distiguish from the overall meaning of the text and concentrate on decreasing the level of toxicity (dirung the training process). That is why the data that is provided for you has the pair structure. Dataset structure is described in next section.
+By this process, we have text with toxicity level. However, for training the model it is best to have sample with high toxicity level and its paraphrazed version with low toxicity level. This gives an opportunity for the model to distiguish from the overall meaning of the text and concentrate on decreasing the level of toxicity (during the training process). That is why the data that is provided for you has the pair structure. Dataset structure is described in next section.
 
 ## Data Description
 
