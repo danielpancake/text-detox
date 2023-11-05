@@ -1,6 +1,8 @@
 # Practical Machine Learning and Deep Learning - Assignment 1 - Text De-toxification
 
-Daniel Vakhrushev <>@innopolis.university BS21-DS-02
+- Daniel Vakhrushev
+- d.satarov@innopolis.university
+- BS21-DS-02
 
 ## How to run the model
 
