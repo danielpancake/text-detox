@@ -40,7 +40,7 @@ def process_data(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def get_dataset_split(df: pd.DataFrame, size: int = 1000) -> pd.DataFrame:
+def get_dataset_split(df: pd.DataFrame, size: int = 100) -> pd.DataFrame:
     """
     This function splits the data into train and test samples.
     """
