@@ -93,7 +93,13 @@ class detoxGPT2:
         trainer.save_model(self.model_dir)
         self.tokenizer.save_pretrained(self.model_dir)
 
-    def generate(self, input_text: str, device: str = "cuda") -> str:
+    def generate(
+        self,
+        input_text: str,
+        max_length: int = 150,
+        sequences: int = 3,
+        device: str = "cuda",
+    ) -> list:
         if self.model is None:
             try:
                 self.model = AutoModelForCausalLM.from_pretrained(
@@ -125,19 +131,33 @@ class detoxGPT2:
             + self.special_tokens_dict["separator"]
         )
 
-        generated_text = self.generator(
+        generated_texts = self.generator(
             prompt_text,
-            max_length=100,
-            num_return_sequences=1,
+            max_length=max_length,
+            num_return_sequences=sequences,
             pad_token_id=self.tokenizer.eos_token_id,
-        )[0]["generated_text"]
+        )
 
-        return generated_text
+        return [text["generated_text"] for text in generated_texts]
 
-    def get_detoxed_suggestions(self, input_text: str, device: str = "cuda") -> list:
-        generated_text = self.generate(input_text, device=device)
+    def get_detoxed_suggestions(
+        self,
+        input_text: str,
+        max_length: int = 150,
+        sequences: int = 3,
+        device: str = "cuda",
+    ) -> list:
+        suggestions = []
 
-        suggestions = generated_text.split(
+        generated_texts = self.generate(input_text, max_length, sequences, device)
+        for text in generated_texts:
+            suggestions += self._parse_generated_text(text)
+
+        return list(set(suggestions))
+
+    def _parse_generated_text(self, text: str) -> list:
+        # Remove the first part of the text
+        suggestions = text.split(
             self.special_tokens_dict["separator"]
             + self.special_tokens_dict["detox_begin"]
         )[1]
